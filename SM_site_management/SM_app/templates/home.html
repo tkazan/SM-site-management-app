@@ -1,0 +1,49 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SM site management{% endblock %}
+
+{% block content %}
+
+    <h1 id="h1_home">Witaj {{ User }}</h1>
+
+    <div class="tile1">
+        <a href="{% url 'sites' %}"><i class="icon-shop"></i><br/>BUDOWY</a>
+    </div>
+    <div class="tile2">
+        <a href="{% url 'materials' %}"><i class="icon-layers"></i><br/>MATERIAŁY</a>
+    </div>
+    <div class="tile3">
+        <a href="{% url 'machines' %}"><i class="icon-wrench"></i><br/>MASZYNY</a>
+    </div>
+    <div class="tile4">
+        <a href="{% url 'contractors' %}"><i class="icon-group"></i><br/>WYKONAWCY</a>
+    </div>
+    <div class="tile5">
+        <a href="{% url 'providers' %}"><i class="icon-truck"></i><br/>DOSTAWCY</a>
+    </div>
+    <div class="tile6">
+        <a href="{% url 'calendar' %}"><i class="icon-calendar"></i><br/>KALENDARZ</a>
+    </div>
+    <div class="tile7">
+        <a href="{% url 'contacts' %}"><i class="icon-users"></i><br/>KONTAKTY</a>
+    </div>
+    <div class="tile8">
+        <a href="{% url 'blog' %}"><i class="icon-doc"></i><br/>BLOG</a>
+    </div>
+{% endblock %}
+
+<!--<i class="icon-users"></i>-->
+<!--<i class="icon-truck"></i>-->
+<!--<i class="icon-mail-1"></i>-->
+<!--<i class="icon-user"></i>-->
+<!--<i class="icon-doc"></i>-->
+<!--<i class="icon-shop"></i>-->
+<!--<i class="icon-calendar"></i>-->
+<!--<i class="icon-attach"></i>-->
+<!--<i class="icon-group"></i>-->
+<!--<i class="icon-wrench"></i>-->
+<!--<i class="icon-cart"></i>-->
+<!--<i class="icon-th"></i>-->
+<!--<i class="icon-layers"></i>-->
+<!--<i class="icon-mail-alt"></i>-->

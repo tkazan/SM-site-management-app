@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontello.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Lato" rel="stylesheet">
+</head>
+<body>
+    <div id="container">
+        <nav>
+            <table>
+                <tr>
+                    <td><a href="{% url 'home' %}"> <i class="demo-icon icon-home"></i> </a></td>
+                    <td><a href="{% url 'sites' %}">BUDOWY</a></td>
+                    <td><a href="{% url 'materials' %}">MATERIAŁY</a></td>
+                    <td><a href="{% url 'machines' %}">MASZYNY</a></td>
+                    <td><a href="{% url 'contractors' %}">WYKONAWCY</a></td>
+                    <td><a href="{% url 'providers' %}">DOSTAWCY</a></td>
+                    <td><a href="{% url 'calendar' %}">KALENDARZ</a></td>
+                    <td><a href="{% url 'contacts' %}">KONTAKTY</a></td>
+                    <td><a href="{% url 'blog' %}">BLOG</a></td>
+                    <td><a href="{% url 'home' %}"><i class="icon-user"></i>LOGOUT</a></td>
+                </tr>
+            </table>
+        </nav><br/>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <footer>SM site management version 1.0 2018 &copy; Tobiasz Kazanowski <i class="icon-mail-1"></i> tobiaszkazanowski@gmail.com</footer>
+    </div>
+</body>
+</html>
