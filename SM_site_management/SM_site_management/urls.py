@@ -28,6 +28,9 @@ urlpatterns = [
     url(r'^calendar/$', CalendarView.as_view(), name="calendar"),
     url(r'^contacts/$', ContactsView.as_view(), name="contacts"),
     url(r'^blog/$', BlogView.as_view(), name="blog"),
+    url(r'^login/$', LoginView.as_view(), name="login"),
+    url(r'^logout/$', my_logout, name="logout"),
+
 
 
 ]

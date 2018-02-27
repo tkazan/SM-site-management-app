@@ -1,0 +1,27 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}Logowanie do SM{% endblock %}
+
+{% block content %}
+    <div id="login">
+    <h1 id="h1_login">Zaloguj się do SM site management</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }} {{ previous.user }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <label>
+            <input type="text" name="login" placeholder="login"><br/>
+        </label>
+        <input type="password" name="password" placeholder="password"><br/>
+        <input type="submit" value="login">
+    </form>
+    </div>
+{% endblock %}
