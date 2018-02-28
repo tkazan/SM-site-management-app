@@ -1,4 +1,5 @@
 from django.db import models
+from PIL import Image
 
 
 class Sites(models.Model):
@@ -6,6 +7,8 @@ class Sites(models.Model):
     address = models.CharField(max_length=128)
     description = models.CharField(max_length=256)
     status = models.TextField(null=True)
+    status_photo = models.ImageField(null=True)
+    photo = models.ImageField(null=True)
 
     def __str__(self):
         return "%s %s" % (self.name, self.address[:20])
@@ -16,7 +19,7 @@ class Contacts(models.Model):
     surname = models.CharField(max_length=128)
     phone = models.CharField(max_length=64)
     mail = models.EmailField()
-    photo = models.CharField(max_length=256)
+    photo = models.ImageField(null=True)
     sites = models.ManyToManyField(Sites, through="SitesContacts")
 
     def __str__(self):
@@ -27,6 +30,9 @@ class SitesContacts(models.Model):
     sites = models.ForeignKey(Sites)
     contacts = models.ForeignKey(Contacts)
     function = models.CharField(max_length=64)
+
+    def __str__(self):
+        return "%s %s" % (self.sites.name, self.contacts.name)
 
 
 class Materials(models.Model):
@@ -61,6 +67,7 @@ class Machines(models.Model):
 class Contractors(models.Model):
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
+    phone = models.CharField(max_length=32, null=True)
     sites = models.ManyToManyField(Sites)
 
     def __str__(self):

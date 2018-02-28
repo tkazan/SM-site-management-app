@@ -1,0 +1,62 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Budowa {{site.name}}{% endblock %}
+
+{% block content %}
+
+    <h1>Budowa {{site.name}}</h1>
+    <div class="sitedescription">
+        <img src="/media/{{site.photo}}"><br/>
+        <p><strong>adres budowy:</strong></p>
+        {{site.address}}
+        <p><strong>opis budowy:</strong></p>
+        {{site.description}}<br/>
+    </div>
+
+    <h2>Inżynierowie</h2>
+    {% for contact in contacts %}
+        <div class="tilecontacts">
+            <img src="/media/{{contact.contacts.photo}}"><br/>
+            {{contact.contacts.name}} {{contact.contacts.surname}}<br/>
+            {{ contact.function }}<br/>
+            tel: {{contact.contacts.phone}}<br/>
+            {{contact.contacts.mail}}<br/>
+        </div>
+    {% endfor %}
+
+    <div style="clear:both;"></div>
+
+    <h2>Zaawansowanie prac</h2>
+    <div class="sitestatus">
+        {{ site.status|linebreaks}}
+    </div>
+    <div class="sitestatus">
+        <img class="status_photo" src="/media/{{site.status_photo}}"><br/>
+    </div>
+    <div style="clear:both;"></div>
+
+    <h2>Materiały</h2>
+    {{ site.materials }}
+
+    <h2>Maszyny</h2>
+    {{ site.machines }}
+
+    <h2>Wykonawcy</h2>
+    <div class="normalcontent">
+        <table class="sitecontractors">
+            <thead></thead>
+            <tbody>
+            {% for contractor in contractors %}
+            <tr>
+                <td>{{ contractor.name }}</td>
+                <td> - </td>
+                <td>{{ contractor.description }}</td>
+                <td>tel: {{ contractor.phone }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}

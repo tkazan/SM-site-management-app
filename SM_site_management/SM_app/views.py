@@ -3,6 +3,10 @@ from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+from .models import *
 
 
 
@@ -18,8 +22,10 @@ class HomeView(LoginRequiredMixin, View):
 class SitesView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
-        ctx = {
 
+        sites = Sites.objects.all()
+        ctx = {
+            "sites":sites,
         }
         return render(request, "sites.html", ctx)
 
@@ -110,5 +116,20 @@ def my_logout(request):
     logout(request)
     messages.info(request, 'Dobrego dnia {}! :-)'.format(previous_user))
     return redirect("/login/")
+
+
+class SiteView(View):
+    def get(self, request, id):
+        site = Sites.objects.get(id=id)
+        contacts = site.sitescontacts_set.all().order_by("pk")
+        contractors = site.contractors_set.all()
+
+        ctx = {
+            "site": site,
+            "contacts": contacts,
+            "contractors": contractors,
+        }
+
+        return render(request, "site.html", ctx)
 
 

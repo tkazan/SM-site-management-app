@@ -4,6 +4,13 @@
 {% block title %}Budowy{% endblock %}
 
 {% block content %}
-    <h1>Tutaj będzie się znajdowała lista budów</h1>
-    <h2>wraz z kompletem niezbędnych informacji o nich</h2>
+    <h1>Budowy</h1>
+    {% for site in sites %}
+        <a href="{% url 'site' site.id %}">
+            <div id="site">
+                <div><img src="/media/{{site.photo}}"></div>
+                <div>{{site.name}}</div><br/>
+            </div>
+        </a>
+    {% endfor %}
 {% endblock %}

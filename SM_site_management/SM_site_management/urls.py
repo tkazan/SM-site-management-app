@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
 from SM_app.views import *
 
 urlpatterns = [
@@ -30,7 +33,9 @@ urlpatterns = [
     url(r'^blog/$', BlogView.as_view(), name="blog"),
     url(r'^login/$', LoginView.as_view(), name="login"),
     url(r'^logout/$', my_logout, name="logout"),
-
-
+    url(r'^site/(?P<id>(\d)+)/$', SiteView.as_view(), name="site"),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
