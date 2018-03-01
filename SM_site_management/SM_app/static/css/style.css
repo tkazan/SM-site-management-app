@@ -187,6 +187,15 @@ img.status_photo {
     max-width: 500px;
 }
 
+img.sitephoto {
+    max-height: 300px;
+    max-width: 500px;
+}
+
+img.underconstruction {
+    max-width: 800px;
+}
+
 .tilecontacts {
     float: left;
     width: 340px;
@@ -221,5 +230,24 @@ span {
 }
 
 .sitecontractors {
-    width:50%;
+    width: 50%;
+}
+
+table.materialstable {
+    width: 100%;
+    border: 1px solid white;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 15px;
+}
+
+table.materialstable td {
+    border: 1px solid white;
+    border-collapse: collapse;
+    text-align: left;
+    padding: 3px;
+}
+table.materialstable thead {
+    font-weight: bold;
+    font-size: 20px;
 }

@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name="login"),
     url(r'^logout/$', my_logout, name="logout"),
     url(r'^site/(?P<id>(\d)+)/$', SiteView.as_view(), name="site"),
+    url(r'^materials/$', MaterialsView.as_view(), name="materials"),
 
 ]
 

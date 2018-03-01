@@ -5,4 +5,24 @@
 {% block content %}
     <h1>Sekcja poświęcona sprzętom</h1>
     <h2>Docelowo ma tutaj się znaleźć zestawienie oraz wyszukiwarka</h2>
+    <table class="materialstable">
+        <tr>
+            <td>Maszyna</td>
+            <td>Opis</td>
+            <td>Budowa</td>
+            <td>Cena</td>
+            <td>Operator</td>
+            <td>Telefon</td>
+        </tr>
+    {% for machine in machines %}
+        <tr>
+            <td>{{machine.name}}</td>
+            <td>{{ machine.description }}</td>
+            <td>{%for site in machine.sites.all %} {{ site.name }} {% endfor %}</td>
+            <td>{{ machine.price }}{{ machine.unit }}</td>
+            <td>{{ machine.operator }}</td>
+            <td>{{machine.operator_phone}}</td>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}

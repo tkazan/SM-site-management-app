@@ -78,8 +78,9 @@ class CalendarView(LoginRequiredMixin, View):
 class ContactsView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
+        contacts = Contacts.objects.all().order_by("name")
         ctx = {
-
+            "contacts": contacts,
         }
         return render(request, "contacts.html", ctx)
 
@@ -123,13 +124,59 @@ class SiteView(View):
         site = Sites.objects.get(id=id)
         contacts = site.sitescontacts_set.all().order_by("pk")
         contractors = site.contractors_set.all()
+        materials = site.sitesmaterials_set.all().order_by("materials__name")
+        machines = site.machines_set.all()
 
         ctx = {
             "site": site,
             "contacts": contacts,
             "contractors": contractors,
+            "materials": materials,
+            "machines": machines,
         }
 
         return render(request, "site.html", ctx)
+
+
+def siteslist(sites, sitesmaterials):
+    result = [None] * len(sites)
+    for index, site in enumerate(sites):
+        if site.name in [d.sites.name for d in sitesmaterials]:
+            result[index] = sitesmaterials.filter(sites__name=site.name)[0]
+    return result
+
+class MaterialsView(View):
+    def get(self, request):
+
+        sites = Sites.objects.all().order_by("name")
+        materials = Materials.objects.all().order_by("name")
+        result = {}
+        for material in materials:
+            sitesmaterials = material.sitesmaterials_set.all()
+            result[material] = siteslist(sites, sitesmaterials)
+
+        ctx = {
+            "sites": sites,
+            "result": result,
+        }
+
+        return render(request, "materials.html", ctx)
+
+class MachinesView(View):
+    def get(self, request):
+
+        sites = Sites.objects.all().order_by("name")
+        machines = Machines.objects.all().order_by("name")
+        # result = {}
+        # for material in materials:
+        #     sitesmaterials = material.sitesmaterials_set.all()
+        #     result[material] = siteslist(sites, sitesmaterials)
+
+        ctx = {
+            "machines": machines,
+        }
+
+        return render(request, "machines.html", ctx)
+
 
 

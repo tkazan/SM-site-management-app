@@ -7,7 +7,7 @@
 
     <h1>Budowa {{site.name}}</h1>
     <div class="sitedescription">
-        <img src="/media/{{site.photo}}"><br/>
+        <img class="sitephoto" src="/media/{{site.photo}}"><br/>
         <p><strong>adres budowy:</strong></p>
         {{site.address}}
         <p><strong>opis budowy:</strong></p>
@@ -37,10 +37,41 @@
     <div style="clear:both;"></div>
 
     <h2>Materiały</h2>
-    {{ site.materials }}
+        <div class="normalcontent">
+                <table class="sitecontractors">
+                    <thead></thead>
+                    <tbody>
+                    {% for material in materials %}
+                    <tr>
+                        <td>{{ material.materials.name }}</td>
+                        <td>{{ material.materials.description }}</td>
+                        <td>{{ material.qty }}{{material.materials.unit}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
 
     <h2>Maszyny</h2>
     {{ site.machines }}
+    <div class="normalcontent">
+        <table class="sitecontractors">
+            <thead></thead>
+            <tbody>
+            {% for machine in machines %}
+            <tr>
+                <td>{{ machine.name }}</td>
+                <td> - </td>
+                <td>{{ machine.description }}</td>
+                <td>operator: {{ machine.operator }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 
     <h2>Wykonawcy</h2>
     <div class="normalcontent">

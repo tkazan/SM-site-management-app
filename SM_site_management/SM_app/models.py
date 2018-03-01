@@ -49,7 +49,11 @@ class Materials(models.Model):
 class SitesMaterials(models.Model):
     sites = models.ForeignKey(Sites)
     materials = models.ForeignKey(Materials)
-    qty = models.IntegerField()
+    qty = models.IntegerField(default=0)
+
+    def __str__(self):
+        return " %s - %s - %s - %s%s" % (self.sites.name, self.materials.name, self.materials.description,
+                              self.qty, self.materials.unit)
 
 
 class Machines(models.Model):
@@ -58,6 +62,7 @@ class Machines(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=64)
     operator = models.CharField(max_length=128)
+    operator_phone = models.CharField(max_length=64, default="888-888-888")
     sites = models.ManyToManyField(Sites)
 
     def __str__(self):

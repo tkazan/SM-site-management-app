@@ -4,5 +4,14 @@
 
 {% block content %}
     <h1>Kontakty do inżynierów</h1>
-    <h2>Zestawienie kontaktów wraz z wyszukiwarką i sortowanie wg imion i budów</h2>
+
+    {% for contact in contacts %}
+        <div class="tilecontacts">
+            <img src="/media/{{contact.photo}}"><br/>
+            {{contact.name}} {{contact.surname}}<br/>
+            {{ contact.function }}<br/>
+            tel: {{contact.phone}}<br/>
+            {{contact.mail}}<br/>
+        </div>
+    {% endfor %}
 {% endblock %}

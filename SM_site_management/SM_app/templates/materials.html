@@ -6,4 +6,29 @@
 {% block content %}
     <h1>Sekcja dotycząca materiałów</h1>
     <h2>tutaj będzie tabela z materiałami i wyszukiwarka</h2>
+    <table class="materialstable">
+        <thead>
+            <td>MATERIAŁ</td>
+            <td>OPIS</td>
+            {% for site in sites %}
+            <td>{{site.name}}</td>
+            {% endfor %}
+        </thead>
+
+        {% for key, value in result.items %}
+            <tr>
+                <td>{{ key.name }}</td>
+                <td>{{ key.description }}</td>
+                {% for site in value %}
+                {% if site %}
+                <td>{{ site.qty }}{{ site.materials.unit }}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+    </table>
+
 {% endblock %}
