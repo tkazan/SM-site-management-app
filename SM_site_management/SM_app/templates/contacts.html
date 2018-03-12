@@ -3,15 +3,39 @@
 {% block title %} Kontakty {% endblock %}
 
 {% block content %}
-    <h1>Kontakty do inżynierów</h1>
+    <h1>
+        Kontakty do inżynierów
+        <a style="float: right" href="{% url 'addcontacts' %}"><button>Dodaj nowy kontakt</button></a>
+    </h1>
+
+    <!--{% for contact in sitescontacts %}-->
+        <!--<div class="tilecontacts">-->
+            <!--<img src="/media/{{contact.contacts.photo}}"><br/>-->
+            <!--{{contact.contacts.name}} {{contact.contacts.surname}}<br/>-->
+            <!--{{ contact.function }}<br/>-->
+            <!--{{ contact.sites.name }}<br/>-->
+            <!--tel: {{contact.contacts.phone}}<br/>-->
+            <!--{{contact.contacts.mail}}<br/>-->
+        <!--</div>-->
+    <!--{% endfor %}-->
+
+
 
     {% for contact in contacts %}
         <div class="tilecontacts">
             <img src="/media/{{contact.photo}}"><br/>
-            {{contact.name}} {{contact.surname}}<br/>
-            {{ contact.function }}<br/>
+            <strong>{{contact.name|upper}} {{contact.surname|upper}}</strong><br/>
+            {% for element in contact.sitescontacts_set.all %}
+                {{ element.function }} {{element.sites.name}}<br/>
+            {%endfor%}
+            {{ contact.sites_set.name }}
             tel: {{contact.phone}}<br/>
             {{contact.mail}}<br/>
         </div>
     {% endfor %}
+
+    <div style="clear:both;"></div>
+
+
+
 {% endblock %}

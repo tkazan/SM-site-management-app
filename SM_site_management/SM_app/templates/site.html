@@ -5,7 +5,10 @@
 
 {% block content %}
 
-    <h1>Budowa {{site.name}}</h1>
+    <h1>Budowa {{site.name}}
+        <a href="{% url 'site' site.id|add:'1' %}" style="float:right"><button>Kolejna budowa</button></a>
+        <a href="{% url 'site' site.id|add:'-1' %}" style="float:right"><button>Poprzednia budowa</button></a>
+    </h1>
     <div class="sitedescription">
         <img class="sitephoto" src="/media/{{site.photo}}"><br/>
         <p><strong>adres budowy:</strong></p>

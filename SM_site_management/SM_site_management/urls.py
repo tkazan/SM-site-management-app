@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^logout/$', my_logout, name="logout"),
     url(r'^site/(?P<id>(\d)+)/$', SiteView.as_view(), name="site"),
     url(r'^materials/$', MaterialsView.as_view(), name="materials"),
+    url(r'^contacts/add/$', AddContactsView.as_view(), name="addcontacts"),
+    # url(r'^materials/search/$', SearchMaterialsView.as_view(), name="searchmaterials"),
 
 ]
 

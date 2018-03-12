@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +8,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from .models import *
-
+from .forms import *
 
 
 class HomeView(LoginRequiredMixin, View):
@@ -28,15 +29,6 @@ class SitesView(LoginRequiredMixin, View):
             "sites":sites,
         }
         return render(request, "sites.html", ctx)
-
-
-class MaterialsView(LoginRequiredMixin, View):
-    login_url = '/login'
-    def get(self, request):
-        ctx = {
-
-        }
-        return render(request, "materials.html", ctx)
 
 
 class MachinesView(LoginRequiredMixin, View):
@@ -79,7 +71,9 @@ class ContactsView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
         contacts = Contacts.objects.all().order_by("name")
+        # sitescontacts = SitesContacts.objects.all().order_by("sites__name")
         ctx = {
+            # "sitescontacts": sitescontacts,
             "contacts": contacts,
         }
         return render(request, "contacts.html", ctx)
@@ -92,6 +86,7 @@ class BlogView(LoginRequiredMixin, View):
 
         }
         return render(request, "blog.html", ctx)
+
 
 class LoginView(View):
     def get(self, request):
@@ -111,6 +106,7 @@ class LoginView(View):
 
         messages.warning(request, 'Błędny login i/lub hasło!')
         return render(request, "login.html")
+
 
 def my_logout(request):
     previous_user = request.user.username
@@ -145,9 +141,12 @@ def siteslist(sites, sitesmaterials):
             result[index] = sitesmaterials.filter(sites__name=site.name)[0]
     return result
 
-class MaterialsView(View):
-    def get(self, request):
 
+class MaterialsView(LoginRequiredMixin,View):
+    login_url = '/login'
+
+    def get(self, request):
+        form = SearchMaterialsForm()
         sites = Sites.objects.all().order_by("name")
         materials = Materials.objects.all().order_by("name")
         result = {}
@@ -158,25 +157,87 @@ class MaterialsView(View):
         ctx = {
             "sites": sites,
             "result": result,
+            'form': form,
         }
+        return render(request, "materials.html", ctx)
 
+    def post(self, request):
+        form = SearchMaterialsForm(request.POST)
+        sites = Sites.objects.all().order_by("name")
+        materials = Materials.objects.all().order_by("name")
+        result = {}
+        for material in materials:
+            sitesmaterials = material.sitesmaterials_set.all()
+            result[material] = siteslist(sites, sitesmaterials)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            materialsy = Materials.objects.filter(name__icontains=name)
+
+        ctx = {
+            'form': form,
+            'materials': materialsy,
+            "sites": sites,
+            "result": result,
+        }
         return render(request, "materials.html", ctx)
 
 class MachinesView(View):
     def get(self, request):
 
-        sites = Sites.objects.all().order_by("name")
         machines = Machines.objects.all().order_by("name")
-        # result = {}
-        # for material in materials:
-        #     sitesmaterials = material.sitesmaterials_set.all()
-        #     result[material] = siteslist(sites, sitesmaterials)
-
         ctx = {
             "machines": machines,
         }
 
         return render(request, "machines.html", ctx)
+
+
+class AddContactsView(View):
+    def get(self, request):
+        form = AddContactsForm()
+        form2 = AddSitesContactsForm()
+        return render(request, "add_contacts.html", {'form': form, 'form2': form2})
+
+    def post(self, request):
+        action = request.POST.get("submit")
+        form = AddContactsForm(request.POST, request.FILES)
+        form2 = AddSitesContactsForm(request.POST)
+        if form.is_valid() and form2.is_valid():
+            contact = form.save()
+            sitescontacts = form2.save(commit=False)
+            sitescontacts.contacts_id=contact.pk
+            sitescontacts.save()
+
+            if action == "Dodaj i kontynuuj dodawanie":
+                return redirect(reverse("addcontacts"))
+            return redirect(reverse("contacts"))
+        return redirect(reverse("addcontacts"))
+
+
+
+# class SearchMaterialsView(View):
+#
+#     def get(self, request):
+#         form = SearchMaterialsForm()
+#         ctx = {'form': form}
+#         return render(request, "search_materials.html", ctx)
+#
+#     def post(self, request):
+#         form = SearchMaterialsForm(request.POST)
+#         if form.is_valid():
+#             name = form.cleaned_data['name']
+#             materials = Materials.objects.filter(name__icontains = name)
+#         ctx = {
+#             'form': form,
+#             'materials': materials
+#         }
+#         return render(request, "search_materials.html", ctx)
+
+
+
+
+
 
 
 

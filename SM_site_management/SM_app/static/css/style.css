@@ -199,7 +199,8 @@ img.underconstruction {
 .tilecontacts {
     float: left;
     width: 340px;
-    height:310px;
+    min-height: 350px;
+    max-height:400px;
     margin: 10px;
     text-align: center;
 }
@@ -250,4 +251,9 @@ table.materialstable td {
 table.materialstable thead {
     font-weight: bold;
     font-size: 20px;
+}
+
+strong {
+    font-size: larger;
+    line-height: 40px;
 }

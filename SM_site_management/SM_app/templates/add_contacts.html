@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Dodawanie kontaktów{% endblock %}
+
+{% block content %}
+
+<h2>Dodaj kontakt</h2>
+<div class="normalcontent">
+{% if form.has_errors %}
+<ol>
+	{% for e in form.errors %}
+		<li>{{ e }}</li>
+	{% endfor %}
+</ol>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<table>
+		{{ form.as_table }}
+		{{ form2.as_table }}
+	</table>
+	<input type="submit" name="submit" value="Dodaj i kontynuuj dodawanie" />
+	<input type="submit" name="submit" value="Dodaj i wróć do listy kontaktów" />
+</form>
+</div>
+{% endblock %}

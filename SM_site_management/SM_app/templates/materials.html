@@ -4,8 +4,27 @@
 {% block title %}Materiały{% endblock %}
 
 {% block content %}
-    <h1>Sekcja dotycząca materiałów</h1>
-    <h2>tutaj będzie tabela z materiałami i wyszukiwarka</h2>
+    <h1>Dostępne materiały</h1>
+
+    <h2>Wyszukaj materiał</h2>
+
+    <div class="normalcontent">
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Szukaj.." />
+        </form>
+
+        <ul>
+        {% for material in materials %}
+            <li>{{ material.name }} {{ material.description }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <h2>Zestwienie materiałów</h2>
     <table class="materialstable">
         <thead>
             <td>MATERIAŁ</td>

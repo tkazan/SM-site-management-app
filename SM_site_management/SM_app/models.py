@@ -19,7 +19,7 @@ class Contacts(models.Model):
     surname = models.CharField(max_length=128)
     phone = models.CharField(max_length=64)
     mail = models.EmailField()
-    photo = models.ImageField(null=True)
+    photo = models.ImageField(null=True, upload_to='media/')
     sites = models.ManyToManyField(Sites, through="SitesContacts")
 
     def __str__(self):
