@@ -169,7 +169,7 @@ ul.messages {
 #site {
     float: left;
     width: 245px;
-    height: 170px;
+    height: 220px;
     padding: 5px;
     margin: 10px;
     text-align: center;
@@ -235,18 +235,18 @@ span {
 }
 
 table.materialstable {
-    width: 100%;
     border: 1px solid white;
     border-collapse: collapse;
     text-align: left;
     font-size: 15px;
 }
 
-table.materialstable td {
+.materialstable td {
     border: 1px solid white;
     border-collapse: collapse;
     text-align: left;
     padding: 3px;
+    width: 175px;
 }
 table.materialstable thead {
     font-weight: bold;
@@ -256,4 +256,8 @@ table.materialstable thead {
 strong {
     font-size: larger;
     line-height: 40px;
+}
+
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+    content: " \25B4\25BE"
 }

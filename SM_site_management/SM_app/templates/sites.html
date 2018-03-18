@@ -4,7 +4,10 @@
 {% block title %}Budowy{% endblock %}
 
 {% block content %}
-    <h1>Budowy</h1>
+    <h1>
+        Budowy
+        <a style="float: right" href="{% url 'addsites' %}"><button>Dodaj budowę</button></a>
+    </h1>
     {% for site in sites %}
         <a href="{% url 'site' site.id %}">
             <div id="site">

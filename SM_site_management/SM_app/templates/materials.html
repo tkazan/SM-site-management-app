@@ -14,20 +14,40 @@
             <table>
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="Szukaj.." />
-        </form>
-
-        <ul>
-        {% for material in materials %}
-            <li>{{ material.name }} {{ material.description }}</li>
-        {% endfor %}
-        </ul>
+            <input type="submit" value="Szukaj..." />
+        </form><br/>
     </div>
 
-    <h2>Zestwienie materiałów</h2>
     <table class="materialstable">
-        <thead>
+        {% if search %}
+        <tr>
             <td>MATERIAŁ</td>
+            <td>OPIS</td>
+            {% for site in sites %}
+            <td>{{site.name}}</td>
+            {% endfor %}
+        </tr>
+        {% endif %}
+    {% for key, value in search.items %}
+        <tr>
+            <td>{{ key.name }}</td>
+            <td>{{ key.description }}</td>
+            {% for site in value %}
+            {% if site %}
+            <td>{{ site.qty }}{{ site.materials.unit }}</td>
+            {% else %}
+            <td>-</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+
+
+    <h2>Zestwienie materiałów</h2>
+    <table id="sortable" class="materialstable">
+        <thead>
+            <td autoclick="true" onclick="sortTable(0)">MATERIAŁ ▼▲</td>
             <td>OPIS</td>
             {% for site in sites %}
             <td>{{site.name}}</td>
@@ -50,4 +70,6 @@
 
     </table>
 
+
 {% endblock %}
+

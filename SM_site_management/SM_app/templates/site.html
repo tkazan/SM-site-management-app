@@ -6,8 +6,18 @@
 {% block content %}
 
     <h1>Budowa {{site.name}}
-        <a href="{% url 'site' site.id|add:'1' %}" style="float:right"><button>Kolejna budowa</button></a>
-        <a href="{% url 'site' site.id|add:'-1' %}" style="float:right"><button>Poprzednia budowa</button></a>
+        {% if site.id < sites|length %}
+            <a href="{% url 'site' site.id|add:'1' %}"
+        {% else %}
+            <a href="{% url 'site' 1 %}"
+        {% endif %}
+        style="float:right"><button>Kolejna budowa</button>
+        {% if site.id > 1 %}
+            <a href="{% url 'site' site.id|add:'-1' %}"
+        {% else %}
+            <a href="{% url 'site' sites|length %}"
+        {% endif %}
+        style="float:right"><button>Poprzednia budowa</button></a>
     </h1>
     <div class="sitedescription">
         <img class="sitephoto" src="/media/{{site.photo}}"><br/>

@@ -41,6 +41,9 @@ class AddContractorsForm(forms.ModelForm):
 
 
 class SearchMaterialsForm(forms.Form):
-    name = forms.CharField(label='Nazwa materiału', max_length=100)
+    name = forms.CharField(label='Nazwa materiału', max_length=100, required=False)
 
+
+class SearchMachinesForm(forms.Form):
+    name = forms.CharField(label='Maszyna', max_length=100, required=False)
 

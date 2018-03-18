@@ -24,18 +24,94 @@ class SitesView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
 
-        sites = Sites.objects.all()
+        sites = Sites.objects.all().order_by("id")
         ctx = {
             "sites":sites,
         }
         return render(request, "sites.html", ctx)
 
 
+def siteslist(sites, sitesmaterials):
+    result = [None] * len(sites)
+    for index, site in enumerate(sites):
+        if site.name in [d.sites.name for d in sitesmaterials]:
+            result[index] = sitesmaterials.filter(sites__name=site.name)[0]
+    return result
+
+class MaterialsView(LoginRequiredMixin,View):
+    login_url = '/login'
+
+    def get(self, request):
+        form = SearchMaterialsForm()
+        sites = Sites.objects.all().order_by("name")
+        materials = Materials.objects.all().order_by("name")
+        result = {}
+        for material in materials:
+            sitesmaterials = material.sitesmaterials_set.all()
+            result[material] = siteslist(sites, sitesmaterials)
+            paginate_by = 10
+
+        ctx = {
+            "sites": sites,
+            "result": result,
+            'form': form,
+        }
+        return render(request, "materials.html", ctx)
+
+    def post(self, request):
+        form = SearchMaterialsForm(request.POST)
+        sites = Sites.objects.all().order_by("name")
+        materials = Materials.objects.all().order_by("name")
+        result = {}
+        for material in materials:
+            sitesmaterials = material.sitesmaterials_set.all()#.order_by("materials__name")
+            result[material] = siteslist(sites, sitesmaterials)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            if len(name) == 0:
+                searchmaterials = ''
+            else:
+                searchmaterials = Materials.objects.filter(name__icontains=name).order_by("name")
+            search = {}
+            for material in searchmaterials:
+                sitesmaterials = material.sitesmaterials_set.all()
+                search[material] = siteslist(sites, sitesmaterials)
+        ctx = {
+            'form': form,
+            "search": search,
+            "sites": sites,
+            "result": result,
+        }
+        return render(request, "materials.html", ctx)
+
+
 class MachinesView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
+        form = SearchMachinesForm()
+        machines = Machines.objects.all().order_by("name")
         ctx = {
+            "machines": machines,
+            "form": form,
+        }
+        return render(request, "machines.html", ctx)
 
+    def post(self, request):
+        form = SearchMachinesForm(request.POST)
+        machines = Machines.objects.all().order_by("name")
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            if len(name) == 0:
+                searchmachines = ""
+            else:
+                searchmachines = Machines.objects.filter(name__icontains=name).order_by("name")
+
+        ctx = {
+            "machines": machines,
+            "form": form,
+            "searchmachines": searchmachines,
         }
         return render(request, "machines.html", ctx)
 
@@ -115,13 +191,15 @@ def my_logout(request):
     return redirect("/login/")
 
 
-class SiteView(View):
+class SiteView(LoginRequiredMixin, View):
+    login_url = '/login'
     def get(self, request, id):
         site = Sites.objects.get(id=id)
         contacts = site.sitescontacts_set.all().order_by("pk")
         contractors = site.contractors_set.all()
         materials = site.sitesmaterials_set.all().order_by("materials__name")
         machines = site.machines_set.all()
+        sites = Sites.objects.all()
 
         ctx = {
             "site": site,
@@ -129,71 +207,14 @@ class SiteView(View):
             "contractors": contractors,
             "materials": materials,
             "machines": machines,
+            "sites": sites,
         }
 
         return render(request, "site.html", ctx)
 
 
-def siteslist(sites, sitesmaterials):
-    result = [None] * len(sites)
-    for index, site in enumerate(sites):
-        if site.name in [d.sites.name for d in sitesmaterials]:
-            result[index] = sitesmaterials.filter(sites__name=site.name)[0]
-    return result
-
-
-class MaterialsView(LoginRequiredMixin,View):
+class AddContactsView(LoginRequiredMixin, View):
     login_url = '/login'
-
-    def get(self, request):
-        form = SearchMaterialsForm()
-        sites = Sites.objects.all().order_by("name")
-        materials = Materials.objects.all().order_by("name")
-        result = {}
-        for material in materials:
-            sitesmaterials = material.sitesmaterials_set.all()
-            result[material] = siteslist(sites, sitesmaterials)
-
-        ctx = {
-            "sites": sites,
-            "result": result,
-            'form': form,
-        }
-        return render(request, "materials.html", ctx)
-
-    def post(self, request):
-        form = SearchMaterialsForm(request.POST)
-        sites = Sites.objects.all().order_by("name")
-        materials = Materials.objects.all().order_by("name")
-        result = {}
-        for material in materials:
-            sitesmaterials = material.sitesmaterials_set.all()
-            result[material] = siteslist(sites, sitesmaterials)
-
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            materialsy = Materials.objects.filter(name__icontains=name)
-
-        ctx = {
-            'form': form,
-            'materials': materialsy,
-            "sites": sites,
-            "result": result,
-        }
-        return render(request, "materials.html", ctx)
-
-class MachinesView(View):
-    def get(self, request):
-
-        machines = Machines.objects.all().order_by("name")
-        ctx = {
-            "machines": machines,
-        }
-
-        return render(request, "machines.html", ctx)
-
-
-class AddContactsView(View):
     def get(self, request):
         form = AddContactsForm()
         form2 = AddSitesContactsForm()
@@ -214,27 +235,22 @@ class AddContactsView(View):
             return redirect(reverse("contacts"))
         return redirect(reverse("addcontacts"))
 
+class AddSitesView(LoginRequiredMixin, View):
+    login_url = '/login'
+    def get(self, request):
+        form = AddSitesForm()
+        return render(request, "add_sites.html", {'form': form})
 
+    def post(self, request):
+        action = request.POST.get("submit")
+        form = AddSitesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
 
-# class SearchMaterialsView(View):
-#
-#     def get(self, request):
-#         form = SearchMaterialsForm()
-#         ctx = {'form': form}
-#         return render(request, "search_materials.html", ctx)
-#
-#     def post(self, request):
-#         form = SearchMaterialsForm(request.POST)
-#         if form.is_valid():
-#             name = form.cleaned_data['name']
-#             materials = Materials.objects.filter(name__icontains = name)
-#         ctx = {
-#             'form': form,
-#             'materials': materials
-#         }
-#         return render(request, "search_materials.html", ctx)
-
-
+            if action == "Dodaj i kontynuuj dodawanie":
+                return redirect(reverse("addsites"))
+            return redirect(reverse("sites"))
+        return redirect(reverse("addsites"))
 
 
 
