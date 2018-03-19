@@ -47,7 +47,7 @@
     <h2>Zestwienie materiałów</h2>
     <table id="sortable" class="materialstable">
         <thead>
-            <td autoclick="true" onload="sortTable(0)">MATERIAŁ ▼▲</td>
+            <td onclick="sortTable(0)">MATERIAŁ ▼▲</td>
             <td>OPIS</td>
             {% for site in sites %}
             <td>{{site.name}}</td>
