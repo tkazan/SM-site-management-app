@@ -261,3 +261,15 @@ strong {
 table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
     content: " \25B4\25BE"
 }
+
+.pagination {
+    text-align: center;
+}
+.pagination li {
+    list-style-type: none;
+    display: inline;
+    list-style-position:inside;
+    border: 1px solid white;
+    padding: 3px;
+    font-size: 15px;
+}

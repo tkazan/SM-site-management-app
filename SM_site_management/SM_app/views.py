@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import *
 from .forms import *
@@ -49,11 +50,18 @@ class MaterialsView(LoginRequiredMixin,View):
         for material in materials:
             sitesmaterials = material.sitesmaterials_set.all()
             result[material] = siteslist(sites, sitesmaterials)
-            paginate_by = 10
+            page = request.GET.get('page', 1)
+            paginator = Paginator(tuple(result.items()), 15)
+            try:
+                results = paginator.page(page)
+            except PageNotAnInteger:
+                results = paginator.page(1)
+            except EmptyPage:
+                results = paginator.page(paginator.num_pages)
 
         ctx = {
             "sites": sites,
-            "result": result,
+            "results": results,
             'form': form,
         }
         return render(request, "materials.html", ctx)
@@ -66,6 +74,14 @@ class MaterialsView(LoginRequiredMixin,View):
         for material in materials:
             sitesmaterials = material.sitesmaterials_set.all()#.order_by("materials__name")
             result[material] = siteslist(sites, sitesmaterials)
+            page = request.GET.get('page', 1)
+            paginator = Paginator(tuple(result.items()), 15)
+            try:
+                results = paginator.page(page)
+            except PageNotAnInteger:
+                results = paginator.page(1)
+            except EmptyPage:
+                results = paginator.page(paginator.num_pages)
 
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -81,7 +97,7 @@ class MaterialsView(LoginRequiredMixin,View):
             'form': form,
             "search": search,
             "sites": sites,
-            "result": result,
+            "results": results,
         }
         return render(request, "materials.html", ctx)
 

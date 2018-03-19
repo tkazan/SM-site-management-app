@@ -47,14 +47,14 @@
     <h2>Zestwienie materiałów</h2>
     <table id="sortable" class="materialstable">
         <thead>
-            <td autoclick="true" onclick="sortTable(0)">MATERIAŁ ▼▲</td>
+            <td autoclick="true" onload="sortTable(0)">MATERIAŁ ▼▲</td>
             <td>OPIS</td>
             {% for site in sites %}
             <td>{{site.name}}</td>
             {% endfor %}
         </thead>
 
-        {% for key, value in result.items %}
+        {% for key, value in results %}
             <tr>
                 <td>{{ key.name }}</td>
                 <td>{{ key.description }}</td>
@@ -70,6 +70,30 @@
 
     </table>
 
+    {% if results.has_other_pages %}
+
+        <ul class="pagination">
+            {% if results.has_previous %}
+                <li><a href="?page={{ results.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+                <li>&laquo;</li>
+    {% endif %}
+
+        {% for i in results.paginator.page_range %}
+            {% if results.number == i %}
+                <li>{{ i }}</li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if results.has_next %}
+            <li><a href="?page={{ results.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li>&raquo;</li>
+        {% endif %}
+        </ul>
+        {% endif %}
 
 {% endblock %}
 
