@@ -270,6 +270,30 @@ class AddSitesView(LoginRequiredMixin, View):
         return redirect(reverse("addsites"))
 
 
+class AddMaterialsView(LoginRequiredMixin, View):
+    login_url = '/login'
+    def get(self, request):
+        form = AddMaterialsForm()
+        form2 = AddSitesMaterialsForm()
+        return render(request, "add_materials.html", {'form': form, 'form2': form2})
+
+    def post(self, request):
+        action = request.POST.get("submit")
+        form = AddMaterialsForm(request.POST, request.FILES)
+        form2 = AddSitesMaterialsForm(request.POST)
+        if form.is_valid() and form2.is_valid():
+            material = form.save()
+            sitesmaterials = form2.save(commit=False)
+            sitesmaterials.materials_id=material.pk
+            sitesmaterials.save()
+
+            if action == "Dodaj i kontynuuj dodawanie":
+                return redirect(reverse("addmaterials"))
+            return redirect(reverse("materials"))
+        return redirect(reverse("addmaterials"))
+
+
+
 
 
 
