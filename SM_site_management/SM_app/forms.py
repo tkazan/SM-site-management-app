@@ -28,11 +28,11 @@ class AddMaterialsForm(forms.ModelForm):
         exclude = ['providers', 'sites']
 
 
-class AddSitesMaterialsForm(forms.ModelForm):
-    class Meta:
-        model = SitesMaterials
-        fields = '__all__'
-        exclude = ['materials']
+# class AddSitesMaterialsForm(forms.ModelForm):
+#     class Meta:
+#         model = SitesMaterials
+#         fields = '__all__'
+#         exclude = ['materials']
 
 
 

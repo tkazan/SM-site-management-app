@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from operator import itemgetter, attrgetter
 
 from .models import *
 from .forms import *
@@ -274,18 +273,19 @@ class AddMaterialsView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
         form = AddMaterialsForm()
-        form2 = AddSitesMaterialsForm()
-        return render(request, "add_materials.html", {'form': form, 'form2': form2})
+        # form2 = AddSitesMaterialsForm()
+        return render(request, "add_materials.html", {'form': form,}) #'form2': form2})
 
     def post(self, request):
         action = request.POST.get("submit")
         form = AddMaterialsForm(request.POST, request.FILES)
-        form2 = AddSitesMaterialsForm(request.POST)
-        if form.is_valid() and form2.is_valid():
-            material = form.save()
-            sitesmaterials = form2.save(commit=False)
-            sitesmaterials.materials_id=material.pk
-            sitesmaterials.save()
+        # form2 = AddSitesMaterialsForm(request.POST)
+        if form.is_valid(): #and form2.is_valid():
+            # material = form.save()
+            form.save()
+            # sitesmaterials = form2.save(commit=False)
+            # sitesmaterials.materials_id=material.pk
+            # sitesmaterials.save()
 
             if action == "Dodaj i kontynuuj dodawanie":
                 return redirect(reverse("addmaterials"))
